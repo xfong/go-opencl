@@ -14,10 +14,17 @@ import (
 	"unsafe"
 )
 
-type BuildError string
+type BuildError struct {
+	Message string
+	Device  *Device
+}
 
 func (e BuildError) Error() string {
-	return fmt.Sprintf("cl: build error (%s)", string(e))
+	if e.Device != nil {
+		return fmt.Sprintf("cl: build error on %q: %s", e.Device.Name(), e.Message)
+	} else {
+		return fmt.Sprintf("cl: build error: %s", e.Message)
+	}
 }
 
 type Program struct {
@@ -53,19 +60,33 @@ func (p *Program) BuildProgram(devices []*Device, options string) error {
 		buffer := make([]byte, 4096)
 		var bLen C.size_t
 		var err C.cl_int
-		for i := 2; i >= 0; i-- {
-			err = C.clGetProgramBuildInfo(p.clProgram, p.devices[0].id, C.CL_PROGRAM_BUILD_LOG, C.size_t(len(buffer)), unsafe.Pointer(&buffer[0]), &bLen)
-			if err == C.CL_INVALID_VALUE && i > 0 && bLen < 1024*1024 {
-				// INVALID_VALUE probably means our buffer isn't large enough
-				buffer = make([]byte, bLen)
-			} else {
-				break
+
+		for _, dev := range p.devices {
+			for i := 2; i >= 0; i-- {
+				err = C.clGetProgramBuildInfo(p.clProgram, dev.id, C.CL_PROGRAM_BUILD_LOG, C.size_t(len(buffer)), unsafe.Pointer(&buffer[0]), &bLen)
+				if err == C.CL_INVALID_VALUE && i > 0 && bLen < 1024*1024 {
+					// INVALID_VALUE probably means our buffer isn't large enough
+					buffer = make([]byte, bLen)
+				} else {
+					break
+				}
+			}
+			if err != C.CL_SUCCESS {
+				return toError(err)
+			}
+
+			if bLen > 1 {
+				return BuildError{
+					Device:  dev,
+					Message: string(buffer[:bLen-1]),
+				}
 			}
 		}
-		if err != C.CL_SUCCESS {
-			return toError(err)
+
+		return BuildError{
+			Device:  nil,
+			Message: "build failed and produced no log entries",
 		}
-		return BuildError(string(buffer[:bLen]))
 	}
 	return nil
 }
