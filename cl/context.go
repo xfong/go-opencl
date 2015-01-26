@@ -131,8 +131,17 @@ func (ctx *Context) CreateEmptyBuffer(flags MemFlag, size int) (*MemObject, erro
 	return ctx.CreateBufferUnsafe(flags, size, nil)
 }
 
+func (ctx *Context) CreateEmptyBufferFloat32(flags MemFlag, size int) (*MemObject, error) {
+	return ctx.CreateBufferUnsafe(flags, 4*size, nil)
+}
+
 func (ctx *Context) CreateBuffer(flags MemFlag, data []byte) (*MemObject, error) {
 	return ctx.CreateBufferUnsafe(flags, len(data), unsafe.Pointer(&data[0]))
+}
+
+//float64
+func (ctx *Context) CreateBufferFloat32(flags MemFlag, data []float32) (*MemObject, error) {
+	return ctx.CreateBufferUnsafe(flags, 4*len(data), unsafe.Pointer(&data[0]))
 }
 
 func (ctx *Context) CreateUserEvent() (*Event, error) {
