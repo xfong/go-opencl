@@ -21,7 +21,9 @@ package cl
 // #else
 // #include "cl.h"
 // #endif
+// #cgo CFLAGS: -I/opt/opencl-headers/include
 // #cgo darwin LDFLAGS: -framework OpenCL
+// #cgo LDFLAGS: -lOpenCL
 import "C"
 import "errors"
 

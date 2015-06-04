@@ -4,6 +4,7 @@ package cl
 // #include "OpenCL/opencl.h"
 // #else
 // #include "cl.h"
+// #include "cl_ext.h"
 // #endif
 import "C"
 
@@ -455,7 +456,8 @@ func (d *Device) DoubleFPConfig() FPConfig {
 // Describes the OPTIONAL half precision floating-point capability of the OpenCL device
 func (d *Device) HalfFPConfig() FPConfig {
 	var fpConfig C.cl_device_fp_config
-	if err := C.clGetDeviceInfo(d.id, C.CL_DEVICE_HALF_FP_CONFIG, C.size_t(unsafe.Sizeof(fpConfig)), unsafe.Pointer(&fpConfig), nil); err != C.CL_SUCCESS {
+	err := C.clGetDeviceInfo(d.id, C.CL_DEVICE_HALF_FP_CONFIG, C.size_t(unsafe.Sizeof(fpConfig)), unsafe.Pointer(&fpConfig), nil)
+	if err != C.CL_SUCCESS {
 		return FPConfig(0)
 	}
 	return FPConfig(fpConfig)
