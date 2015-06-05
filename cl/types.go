@@ -218,6 +218,10 @@ const (
 	MemUseHostPtr   MemFlag = C.CL_MEM_USE_HOST_PTR
 	MemAllocHostPtr MemFlag = C.CL_MEM_ALLOC_HOST_PTR
 	MemCopyHostPtr  MemFlag = C.CL_MEM_COPY_HOST_PTR
+
+	MemWriteOnlyHost MemFlag = C.CL_MEM_HOST_WRITE_ONLY
+	MemReadOnlyHost  MemFlag = C.CL_MEM_HOST_READ_ONLY
+	MemNoAccessHost  MemFlag = C.CL_MEM_HOST_NO_ACCESS
 )
 
 type MemObjectType int
@@ -232,8 +236,9 @@ type MapFlag int
 
 const (
 	// This flag specifies that the region being mapped in the memory object is being mapped for reading.
-	MapFlagRead  MapFlag = C.CL_MAP_READ
-	MapFlagWrite MapFlag = C.CL_MAP_WRITE
+	MapFlagRead                  MapFlag = C.CL_MAP_READ
+	MapFlagWrite                 MapFlag = C.CL_MAP_WRITE
+	MapFlagWriteInvalidateRegion MapFlag = C.CL_MAP_WRITE_INVALIDATE_REGION
 )
 
 func (mf MapFlag) toCl() C.cl_map_flags {

@@ -42,7 +42,7 @@ func (q *CommandQueue) Finish() error {
 
 // Issues all previously queued OpenCL commands in a command-queue to the device associated with the command-queue.
 func (q *CommandQueue) Flush() error {
-	return toError(C.clFinish(q.clQueue))
+	return toError(C.clFlush(q.clQueue))
 }
 
 // Enqueues a command to map a region of the buffer object given by buffer into the host address space and returns a pointer to this mapped region.

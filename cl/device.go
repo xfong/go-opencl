@@ -122,7 +122,7 @@ func (d *Device) nullableId() C.cl_device_id {
 	return d.id
 }
 
-func (d *Device) getInfoString(param C.cl_device_info, panicOnError bool) (string, error) {
+func (d *Device) GetInfoString(param C.cl_device_info, panicOnError bool) (string, error) {
 	var strC [1024]C.char
 	var strN C.size_t
 	if err := C.clGetDeviceInfo(d.id, param, 1024, unsafe.Pointer(&strC), &strN); err != C.CL_SUCCESS {
@@ -182,37 +182,37 @@ func (d *Device) getInfoBool(param C.cl_device_info, panicOnError bool) (bool, e
 }
 
 func (d *Device) Name() string {
-	str, _ := d.getInfoString(C.CL_DEVICE_NAME, true)
+	str, _ := d.GetInfoString(C.CL_DEVICE_NAME, true)
 	return str
 }
 
 func (d *Device) Vendor() string {
-	str, _ := d.getInfoString(C.CL_DEVICE_VENDOR, true)
+	str, _ := d.GetInfoString(C.CL_DEVICE_VENDOR, true)
 	return str
 }
 
 func (d *Device) Extensions() string {
-	str, _ := d.getInfoString(C.CL_DEVICE_EXTENSIONS, true)
+	str, _ := d.GetInfoString(C.CL_DEVICE_EXTENSIONS, true)
 	return str
 }
 
 func (d *Device) OpenCLCVersion() string {
-	str, _ := d.getInfoString(C.CL_DEVICE_OPENCL_C_VERSION, true)
+	str, _ := d.GetInfoString(C.CL_DEVICE_OPENCL_C_VERSION, true)
 	return str
 }
 
 func (d *Device) Profile() string {
-	str, _ := d.getInfoString(C.CL_DEVICE_PROFILE, true)
+	str, _ := d.GetInfoString(C.CL_DEVICE_PROFILE, true)
 	return str
 }
 
 func (d *Device) Version() string {
-	str, _ := d.getInfoString(C.CL_DEVICE_VERSION, true)
+	str, _ := d.GetInfoString(C.CL_DEVICE_VERSION, true)
 	return str
 }
 
 func (d *Device) DriverVersion() string {
-	str, _ := d.getInfoString(C.CL_DRIVER_VERSION, true)
+	str, _ := d.GetInfoString(C.CL_DRIVER_VERSION, true)
 	return str
 }
 
