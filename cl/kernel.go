@@ -56,6 +56,8 @@ func (k *Kernel) SetArg(index int, arg interface{}) error {
 		return k.SetArgInt8(index, val)
 	case uint32:
 		return k.SetArgUint32(index, val)
+	case uint64:
+		return k.SetArgUint64(index, val)
 	case int32:
 		return k.SetArgInt32(index, val)
 	case float32:
@@ -93,11 +95,16 @@ func (k *Kernel) SetArgUint32(index int, val uint32) error {
 	return k.SetArgUnsafe(index, int(unsafe.Sizeof(val)), unsafe.Pointer(&val))
 }
 
+func (k *Kernel) SetArgUint64(index int, val uint64) error {
+	return k.SetArgUnsafe(index, int(unsafe.Sizeof(val)), unsafe.Pointer(&val))
+}
+
 func (k *Kernel) SetArgLocal(index int, size int) error {
 	return k.SetArgUnsafe(index, size, nil)
 }
 
 func (k *Kernel) SetArgUnsafe(index, argSize int, arg unsafe.Pointer) error {
+	//fmt.Println("FUNKY: ", index, argSize)
 	return toError(C.clSetKernelArg(k.clKernel, C.cl_uint(index), C.size_t(argSize), arg))
 }
 
