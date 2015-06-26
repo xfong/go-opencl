@@ -16,14 +16,10 @@ in the Go standard packages.
 */
 package cl
 
-// #ifdef __APPLE__
-// #include "OpenCL/opencl.h"
-// #else
-// #include "cl.h"
-// #endif
-// #cgo CFLAGS: -I/opt/opencl-headers/include
+// #include "../headers/1.2/opencl.h"
+// #cgo CFLAGS: -I../headers/1.2
 // #cgo darwin LDFLAGS: -framework OpenCL
-// #cgo LDFLAGS: -lOpenCL
+// #cgo linux LDFLAGS: -lOpenCL
 import "C"
 import "errors"
 
