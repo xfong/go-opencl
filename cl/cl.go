@@ -16,8 +16,8 @@ in the Go standard packages.
 */
 package cl
 
-// #include "../headers/1.2/opencl.h"
-// #cgo CFLAGS: -I../headers/1.2
+// #include "headers/1.2/opencl.h"
+// #cgo CFLAGS: -Iheaders/1.2
 // #cgo darwin LDFLAGS: -framework OpenCL
 // #cgo linux LDFLAGS: -lOpenCL
 import "C"
