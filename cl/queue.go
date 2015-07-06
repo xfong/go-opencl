@@ -100,6 +100,12 @@ func (q *CommandQueue) EnqueueWriteBuffer(buffer *MemObject, blocking bool, offs
 	return newEvent(event), err
 }
 
+func (q *CommandQueue) EnqueueWriteBufferByte(buffer *MemObject, blocking bool, offset int, data []byte, eventWaitList []*Event) (*Event, error) {
+	dataPtr := unsafe.Pointer(&data[0])
+	dataSize := int(unsafe.Sizeof(data[0])) * len(data)
+	return q.EnqueueWriteBuffer(buffer, blocking, offset, dataSize, dataPtr, eventWaitList)
+}
+
 func (q *CommandQueue) EnqueueWriteBufferFloat32(buffer *MemObject, blocking bool, offset int, data []float32, eventWaitList []*Event) (*Event, error) {
 	dataPtr := unsafe.Pointer(&data[0])
 	dataSize := int(unsafe.Sizeof(data[0])) * len(data)
@@ -111,6 +117,12 @@ func (q *CommandQueue) EnqueueReadBuffer(buffer *MemObject, blocking bool, offse
 	var event C.cl_event
 	err := toError(C.clEnqueueReadBuffer(q.clQueue, buffer.clMem, clBool(blocking), C.size_t(offset), C.size_t(dataSize), dataPtr, C.cl_uint(len(eventWaitList)), eventListPtr(eventWaitList), &event))
 	return newEvent(event), err
+}
+
+func (q *CommandQueue) EnqueueReadBufferByte(buffer *MemObject, blocking bool, offset int, data []byte, eventWaitList []*Event) (*Event, error) {
+	dataPtr := unsafe.Pointer(&data[0])
+	dataSize := int(unsafe.Sizeof(data[0])) * len(data)
+	return q.EnqueueReadBuffer(buffer, blocking, offset, dataSize, dataPtr, eventWaitList)
 }
 
 func (q *CommandQueue) EnqueueReadBufferFloat32(buffer *MemObject, blocking bool, offset int, data []float32, eventWaitList []*Event) (*Event, error) {
