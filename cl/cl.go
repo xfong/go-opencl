@@ -17,7 +17,7 @@ in the Go standard packages.
 package cl
 
 // #include "headers/1.2/opencl.h"
-// #cgo CFLAGS: -Iheaders/1.2
+// #cgo CFLAGS: -Iheaders/1.2 -Wno-ignored-attributes
 // #cgo darwin LDFLAGS: -framework OpenCL
 // #cgo linux LDFLAGS: -lOpenCL
 import "C"
