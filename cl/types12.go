@@ -26,7 +26,7 @@ const (
 	// region being mapped is overwritten by the host. This flag allows the implementation to no longer
 	// guarantee that the pointer returned by clEnqueueMapBuffer or clEnqueueMapImage contains the
 	// latest bits in the region being mapped which can be a significant performance enhancement.
-	MapFlagWriteInvalidateRegion MapFlag = C.CL_MAP_WRITE_INVALIDATE_REGION
+	// MapFlagWriteInvalidateRegion MapFlag = C.CL_MAP_WRITE_INVALIDATE_REGION
 )
 
 func init() {

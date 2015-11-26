@@ -17,7 +17,7 @@ func init() {
 }
 
 func (d *Device) BuiltInKernels() string {
-	str, _ := d.getInfoString(C.CL_DEVICE_BUILT_IN_KERNELS, true)
+	str, _ := d.GetInfoString(C.CL_DEVICE_BUILT_IN_KERNELS, true)
 	return str
 }
 
