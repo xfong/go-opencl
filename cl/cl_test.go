@@ -189,11 +189,18 @@ func TestHello(t *testing.T) {
 	if err != nil {
 		t.Fatalf("CreateKernel failed: %+v", err)
 	}
-	for i := 0; i < 3; i++ {
+	totalArgs, err := kernel.NumArgs()
+	if err != nil {
+		t.Errorf("Failed to get number of arguments of kernel: $+v", err)
+	} else {
+		t.Logf("Number of arguments in kernel : %d", totalArgs)
+	}
+	for i := 0; i < totalArgs; i++ {
 		name, err := kernel.ArgName(i)
 		if err == ErrUnsupported {
 			break
 		} else if err != nil {
+			t.Logf("Returned output: %s", name)
 			t.Errorf("GetKernelArgInfo for name failed: %+v", err)
 			break
 		} else {
