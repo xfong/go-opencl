@@ -182,7 +182,7 @@ func TestHello(t *testing.T) {
 	if err != nil {
 		t.Fatalf("CreateProgramWithSource failed: %+v", err)
 	}
-	if err := program.BuildProgram(nil, ""); err != nil {
+	if err := program.BuildProgram(nil, "-cl-std=CL1.2 -cl-kernel-arg-info"); err != nil {
 		t.Fatalf("BuildProgram failed: %+v", err)
 	}
 	kernel, err := program.CreateKernel("square")
@@ -195,6 +195,7 @@ func TestHello(t *testing.T) {
 	} else {
 		t.Logf("Number of arguments in kernel : %d", totalArgs)
 	}
+	// This part did not work on NVidia drivers
 	for i := 0; i < totalArgs; i++ {
 		name, err := kernel.ArgName(i)
 		if err == ErrUnsupported {
@@ -258,4 +259,6 @@ func TestHello(t *testing.T) {
 	if correct != len(data) {
 		t.Fatalf("%d/%d correct values", correct, len(data))
 	}
+
+	t.Logf("Finished tests")
 }
