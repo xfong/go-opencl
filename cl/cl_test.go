@@ -201,7 +201,6 @@ func TestHello(t *testing.T) {
 		if err == ErrUnsupported {
 			break
 		} else if err != nil {
-			t.Logf("Returned output: %s", name)
 			t.Errorf("GetKernelArgInfo for name failed: %+v", err)
 			break
 		} else {
