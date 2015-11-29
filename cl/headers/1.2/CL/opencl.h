@@ -30,10 +30,10 @@
 extern "C" {
 #endif
 
-#include <cl.h>
-#include <cl_gl.h>
-#include <cl_gl_ext.h>
-#include <cl_ext.h>
+#include "cl.h"
+#include "cl_gl.h"
+#include "cl_gl_ext.h"
+#include "cl_ext.h"
 
 #ifdef __cplusplus
 }

@@ -33,7 +33,7 @@
 extern "C" {
 #endif
 
-#include <cl_gl.h>
+#include "cl_gl.h"
 
 /*
  * For each extension, follow this template

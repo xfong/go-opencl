@@ -37,7 +37,7 @@ extern "C" {
 #include <AvailabilityMacros.h>
 #endif
 
-#include <cl.h>
+#include "cl.h"
 
 /* cl_khr_fp16 extension - no extension #define since it has no functions  */
 #define CL_DEVICE_HALF_FP_CONFIG                    0x1033
