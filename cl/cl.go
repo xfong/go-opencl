@@ -19,7 +19,7 @@ package cl
 // #cgo CFLAGS: -I CL
 // #cgo darwin LDFLAGS: -framework OpenCL
 // #cgo linux LDFLAGS: -lOpenCL
-// #ifdef __APPLE
+// #ifdef __APPLE__
 // #include "OpenCL/opencl.h"
 // #else
 // #include "CL/opencl.h"
