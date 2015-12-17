@@ -157,5 +157,19 @@ func (ctx *Context) Release() {
 	releaseContext(ctx)
 }
 
-// http://www.khronos.org/registry/cl/sdk/1.2/docs/man/xhtml/clCreateSubBuffer.html
-// func (memObject *MemObject) CreateSubBuffer(flags MemFlag, bufferCreateType BufferCreateType, )
+func (b *MemObject) CreateSubBufferRegion(flags MemFlag, origin int, size int) (*MemObject, error) {
+	var err C.cl_int
+	ci := C.cl_buffer_region{
+		origin: C.size_t(origin),
+		size:   C.size_t(size),
+	}
+	clBuffer := C.clCreateSubBuffer(b.clMem, C.cl_mem_flags(flags),
+		C.CL_BUFFER_CREATE_TYPE_REGION, unsafe.Pointer(&ci), &err)
+	if err != C.CL_SUCCESS {
+		return nil, toError(err)
+	}
+	if clBuffer == nil {
+		return nil, ErrUnknown
+	}
+	return newMemObject(clBuffer, size), nil
+}

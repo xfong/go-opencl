@@ -211,14 +211,18 @@ func TestHello(t *testing.T) {
 	if err != nil {
 		t.Fatalf("CreateBuffer failed for input: %+v", err)
 	}
-	output, err := context.CreateEmptyBuffer(MemReadOnly, 4*len(data))
+	output, err := context.CreateEmptyBuffer(MemReadOnly, 12*len(data))
 	if err != nil {
 		t.Fatalf("CreateBuffer failed for output: %+v", err)
+	}
+	output_region, err := output.CreateSubBufferRegion(0, 4*len(data), 4*len(data))
+	if err != nil {
+		t.Fatalf("CreateSubBufferRegion failed for output_region: %+v", err)
 	}
 	if _, err := queue.EnqueueWriteBufferFloat32(input, true, 0, data[:], nil); err != nil {
 		t.Fatalf("EnqueueWriteBufferFloat32 failed: %+v", err)
 	}
-	if err := kernel.SetArgs(input, output, uint32(len(data))); err != nil {
+	if err := kernel.SetArgs(input, output_region, uint32(len(data))); err != nil {
 		t.Fatalf("SetKernelArgs failed: %+v", err)
 	}
 
@@ -243,20 +247,32 @@ func TestHello(t *testing.T) {
 		t.Fatalf("Finish failed: %+v", err)
 	}
 
-	results := make([]float32, len(data))
+	output_region.Release()
+
+	results := make([]float32, 3*len(data))
 	if _, err := queue.EnqueueReadBufferFloat32(output, true, 0, results, nil); err != nil {
 		t.Fatalf("EnqueueReadBufferFloat32 failed: %+v", err)
 	}
 
 	correct := 0
+	for i := 0; i < len(data); i++ {
+		if results[i] == 0 {
+			correct++
+		}
+	}
 	for i, v := range data {
-		if results[i] == v*v {
+		if results[len(data)+i] == v*v {
+			correct++
+		}
+	}
+	for i := 2 * len(data); i < 3*len(data); i++ {
+		if results[i] == 0 {
 			correct++
 		}
 	}
 
-	if correct != len(data) {
-		t.Fatalf("%d/%d correct values", correct, len(data))
+	if correct != len(results) {
+		t.Fatalf("%d/%d correct values", correct, len(results))
 	}
 
 	t.Logf("Finished tests")
