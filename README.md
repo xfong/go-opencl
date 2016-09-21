@@ -1,8 +1,6 @@
 OpenCL bindings for Go
 ======================
 
-Documentation at <http://godoc.org/github.com/samuel/go-opencl/cl>
+This library is superceded by go2opencl.
 
-Can look at cl_test.go for an example of use.
-
-To get OpenCL 1.2 API build with the tag `cl12`
+Please visit https://github.com/xfong/go2opencl
